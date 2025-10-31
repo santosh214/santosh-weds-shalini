@@ -4,8 +4,9 @@ import musicFile from "./assets/wedding-music.mp3";
 
 function App() {
   const [currentSlide, setCurrentSlide] = useState(0);
-  const audioRef = useRef(null);
   const [timeLeft, setTimeLeft] = useState({});
+  const [isPlaying, setIsPlaying] = useState(false);
+  const audioRef = useRef(null);
 
   useEffect(() => {
     const targetDate = new Date("2025-11-22T19:00:00");
@@ -30,9 +31,11 @@ function App() {
       title: "Pre-Wedding Celebration",
       content: (
         <>
+          <div className="countdown">
+            🕒 {timeLeft.days}d {timeLeft.hours}h {timeLeft.minutes}m {timeLeft.seconds}s
+          </div>
           <p>With divine blessings and our elders’ love,</p>
           <h2>Santosh Singh 💍 Shalini Chourey</h2>
-          <p>joyfully invite you to the celebration of love and laughter.</p>
           <div className="event">
             <h3>Sangeet & Mata Pujan</h3>
             <p>
@@ -40,20 +43,13 @@ function App() {
               📍 Bal Mukund ki Bagiya, Bhopal
             </p>
             <p>Let’s dance, sing, and bless the couple as they begin their journey together.</p>
-            <a
-              href="https://maps.app.goo.gl/dK8VyuUtHY33ehav6"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="map-button"
-            >
+            <a href="https://maps.app.goo.gl/dK8VyuUtHY33ehav6" target="_blank" rel="noopener noreferrer" className="map-button">
               📍 Get Directions
             </a>
-            <p>📞 Contact: 9993024884 / 8966933600</p>
           </div>
         </>
       ),
-      bgImage:
-        "https://images.unsplash.com/photo-1522673607200-164d1b6ce486?auto=format&fit=crop&w=1600&q=80",
+      bgImage: "https://images.unsplash.com/photo-1522673607200-164d1b6ce486?auto=format&fit=crop&w=1600&q=80",
     },
     {
       id: 2,
@@ -61,9 +57,7 @@ function App() {
       content: (
         <>
           <div className="countdown">
-            <p>
-              🕒 {timeLeft.days}d {timeLeft.hours}h {timeLeft.minutes}m {timeLeft.seconds}s
-            </p>
+            🕒 {timeLeft.days}d {timeLeft.hours}h {timeLeft.minutes}m {timeLeft.seconds}s
           </div>
           <p>Under the starlit skies, two hearts become one.</p>
           <h2>Santosh Singh 💍 Shalini Chourey</h2>
@@ -74,20 +68,13 @@ function App() {
               📍 Royal Marriage Garden, Sironj
             </p>
             <p>Join us for a regal evening of love, laughter, and lifelong memories.</p>
-            <a
-              href="https://maps.app.goo.gl/3A3Hgx4CJXZbwf1r9"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="map-button"
-            >
+            <a href="https://maps.app.goo.gl/3A3Hgx4CJXZbwf1r9" target="_blank" rel="noopener noreferrer" className="map-button">
               📍 Get Directions
             </a>
-            <p>📞 Contact: 9993024884 / 8966933600</p>
           </div>
         </>
       ),
-      bgImage:
-        "https://images.unsplash.com/photo-1603015077423-1b9e38f60c09?auto=format&fit=crop&w=1600&q=80",
+      bgImage: "https://images.unsplash.com/photo-1522673607200-164d1b6ce486?auto=format&fit=crop&w=1600&q=80",
     },
   ];
 
@@ -99,16 +86,34 @@ function App() {
     return () => clearInterval(interval);
   }, [slides.length]);
 
-  // Autoplay music
+  // Try autoplay on mount
   useEffect(() => {
     if (audioRef.current) {
-      audioRef.current.play().catch((err) => console.log("Autoplay blocked:", err));
+      audioRef.current.play()
+        .then(() => setIsPlaying(true))
+        .catch(() => setIsPlaying(false));
     }
   }, []);
+
+  const togglePlay = () => {
+    if (!audioRef.current) return;
+    if (isPlaying) {
+      audioRef.current.pause();
+      setIsPlaying(false);
+    } else {
+      audioRef.current.play().catch((err) => console.log("Play blocked:", err));
+      setIsPlaying(true);
+    }
+  };
 
   return (
     <div className="app">
       <audio ref={audioRef} src={musicFile} loop />
+      {/* Floating play button */}
+      <button className="play-button" onClick={togglePlay}>
+  {isPlaying ? "🎵" : "🎶"}
+      </button>
+
       <div
         key={slides[currentSlide].id}
         className="slide fade-in"

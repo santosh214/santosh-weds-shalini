@@ -5,6 +5,24 @@ import musicFile from "./assets/wedding-music.mp3";
 function App() {
   const [currentSlide, setCurrentSlide] = useState(0);
   const audioRef = useRef(null);
+  const [timeLeft, setTimeLeft] = useState({});
+
+  useEffect(() => {
+    const targetDate = new Date("2025-11-22T19:00:00");
+    const interval = setInterval(() => {
+      const now = new Date();
+      const diff = targetDate - now;
+      if (diff > 0) {
+        setTimeLeft({
+          days: Math.floor(diff / (1000 * 60 * 60 * 24)),
+          hours: Math.floor((diff / (1000 * 60 * 60)) % 24),
+          minutes: Math.floor((diff / 1000 / 60) % 60),
+          seconds: Math.floor((diff / 1000) % 60),
+        });
+      }
+    }, 1000);
+    return () => clearInterval(interval);
+  }, []);
 
   const slides = [
     {
@@ -21,9 +39,7 @@ function App() {
               📅 20th & 21st November 2025 <br />
               📍 Bal Mukund ki Bagiya, Bhopal
             </p>
-            <p>
-              Let’s dance, sing, and bless the couple as they begin their journey together.
-            </p>
+            <p>Let’s dance, sing, and bless the couple as they begin their journey together.</p>
             <a
               href="https://maps.app.goo.gl/dK8VyuUtHY33ehav6"
               target="_blank"
@@ -44,6 +60,11 @@ function App() {
       title: "Wedding Ceremony",
       content: (
         <>
+          <div className="countdown">
+            <p>
+              🕒 {timeLeft.days}d {timeLeft.hours}h {timeLeft.minutes}m {timeLeft.seconds}s
+            </p>
+          </div>
           <p>Under the starlit skies, two hearts become one.</p>
           <h2>Santosh Singh 💍 Shalini Chourey</h2>
           <div className="event">
@@ -52,9 +73,7 @@ function App() {
               📅 22nd November 2025 | 🕖 From 7:00 PM onwards <br />
               📍 Royal Marriage Garden, Sironj
             </p>
-            <p>
-              Join us for a regal evening of love, laughter, and lifelong memories.
-            </p>
+            <p>Join us for a regal evening of love, laughter, and lifelong memories.</p>
             <a
               href="https://maps.app.goo.gl/3A3Hgx4CJXZbwf1r9"
               target="_blank"
@@ -80,28 +99,22 @@ function App() {
     return () => clearInterval(interval);
   }, [slides.length]);
 
-  // Autoplay music on load (may still be blocked by Chrome)
+  // Autoplay music
   useEffect(() => {
     if (audioRef.current) {
-      audioRef.current.play().catch((err) => {
-        console.log("Autoplay blocked:", err);
-      });
+      audioRef.current.play().catch((err) => console.log("Autoplay blocked:", err));
     }
   }, []);
 
   return (
     <div className="app">
-      {/* Audio Player */}
       <audio ref={audioRef} src={musicFile} loop />
-
       <div
         key={slides[currentSlide].id}
         className="slide fade-in"
         style={{ backgroundImage: `url(${slides[currentSlide].bgImage})` }}
       >
         <div className="overlay" />
-
-        {/* 🌸 Floating petals */}
         <div className="petals">
           {[...Array(25)].map((_, i) => (
             <div
@@ -117,8 +130,6 @@ function App() {
             </div>
           ))}
         </div>
-
-        {/* Text content */}
         <div className="content-container">
           <h1>{slides[currentSlide].title}</h1>
           {slides[currentSlide].content}

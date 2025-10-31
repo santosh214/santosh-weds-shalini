@@ -1,8 +1,10 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import "./App.css";
+import musicFile from "./assets/wedding-music.mp3";
 
 function App() {
   const [currentSlide, setCurrentSlide] = useState(0);
+  const audioRef = useRef(null);
 
   const slides = [
     {
@@ -20,9 +22,17 @@ function App() {
               📍 Bal Mukund ki Bagiya, Bhopal
             </p>
             <p>
-              Let’s dance, sing, and bless the couple as they begin their
-              journey together.
+              Let’s dance, sing, and bless the couple as they begin their journey together.
             </p>
+            <a
+              href="https://maps.app.goo.gl/dK8VyuUtHY33ehav6"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="map-button"
+            >
+              📍 Get Directions
+            </a>
+            <p>📞 Contact: 9993024884 / 8966933600</p>
           </div>
         </>
       ),
@@ -43,9 +53,17 @@ function App() {
               📍 Royal Marriage Garden, Sironj
             </p>
             <p>
-              Join us for a regal evening of love, laughter, and lifelong
-              memories.
+              Join us for a regal evening of love, laughter, and lifelong memories.
             </p>
+            <a
+              href="https://maps.app.goo.gl/3A3Hgx4CJXZbwf1r9"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="map-button"
+            >
+              📍 Get Directions
+            </a>
+            <p>📞 Contact: 9993024884 / 8966933600</p>
           </div>
         </>
       ),
@@ -54,15 +72,28 @@ function App() {
     },
   ];
 
+  // Slide change interval
   useEffect(() => {
     const interval = setInterval(() => {
       setCurrentSlide((prev) => (prev + 1) % slides.length);
-    }, 5000); // auto-change every 5 sec
+    }, 7000);
     return () => clearInterval(interval);
   }, [slides.length]);
 
+  // Autoplay music on load (may still be blocked by Chrome)
+  useEffect(() => {
+    if (audioRef.current) {
+      audioRef.current.play().catch((err) => {
+        console.log("Autoplay blocked:", err);
+      });
+    }
+  }, []);
+
   return (
     <div className="app">
+      {/* Audio Player */}
+      <audio ref={audioRef} src={musicFile} loop />
+
       <div
         key={slides[currentSlide].id}
         className="slide fade-in"
@@ -70,16 +101,16 @@ function App() {
       >
         <div className="overlay" />
 
-        {/* Floating petals */}
+        {/* 🌸 Floating petals */}
         <div className="petals">
-          {[...Array(14)].map((_, i) => (
+          {[...Array(25)].map((_, i) => (
             <div
               key={i}
               className="petal"
               style={{
                 left: `${Math.random() * 100}%`,
-                animationDelay: `${Math.random() * 5}s`,
-                animationDuration: `${8 + Math.random() * 4}s`,
+                animationDelay: `${Math.random() * 8}s`,
+                animationDuration: `${10 + Math.random() * 5}s`,
               }}
             >
               🌸
@@ -87,6 +118,7 @@ function App() {
           ))}
         </div>
 
+        {/* Text content */}
         <div className="content-container">
           <h1>{slides[currentSlide].title}</h1>
           {slides[currentSlide].content}

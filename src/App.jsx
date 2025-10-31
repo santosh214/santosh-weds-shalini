@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from "react";
 import "./App.css";
 import musicFile from "./assets/wedding-music.mp3";
+import bgWedding from "./assets/wedding-image.jpg";
 
 function App() {
   const [currentSlide, setCurrentSlide] = useState(0);
@@ -49,7 +50,7 @@ function App() {
           </div>
         </>
       ),
-      bgImage: "https://images.unsplash.com/photo-1522673607200-164d1b6ce486?auto=format&fit=crop&w=1600&q=80",
+      bgImage:bgWedding,
     },
     {
       id: 2,
@@ -74,7 +75,7 @@ function App() {
           </div>
         </>
       ),
-      bgImage: "https://images.unsplash.com/photo-1522673607200-164d1b6ce486?auto=format&fit=crop&w=1600&q=80",
+      bgImage:bgWedding,
     },
   ];
 

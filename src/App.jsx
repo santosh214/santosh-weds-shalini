@@ -29,68 +29,77 @@ function App() {
   const slides = [
     {
       id: 1,
-      title: "Pre-Wedding Celebration",
+      title: "Santosh Weds Shalini",
       content: (
         <>
-          <div className="countdown">
-            🕒 {timeLeft.days}d {timeLeft.hours}h {timeLeft.minutes}m {timeLeft.seconds}s
-          </div>
-          <p>With divine blessings and our elders’ love,</p>
-          <h2>Santosh Singh 💍 Shalini Chourey</h2>
-          <div className="event">
-            <h3>Sangeet & Mata Pujan</h3>
-            <p>
-              📅 20th & 21st November 2025 <br />
-              📍 Bal Mukund ki Bagiya, Bhopal
-            </p>
-            <p>Let’s dance, sing, and bless the couple as they begin their journey together.</p>
-            <a href="https://maps.app.goo.gl/dK8VyuUtHY33ehav6" target="_blank" rel="noopener noreferrer" className="map-button">
-              📍 Get Directions
-            </a>
-          </div>
+          <p className="fade-in fade-in-1">
+            With the blessings of our elders and the grace of the divine,
+          </p>
+          <p className="fade-in fade-in-2">
+            Two hearts unite to celebrate love, laughter, and togetherness.
+          </p>
+          <p className="fade-in fade-in-3">We invite you to be part of our special moments.</p>
         </>
       ),
-      bgImage:bgWedding,
+      bgImage: bgWedding,
     },
     {
       id: 2,
-      title: "Wedding Ceremony",
+      title: "Sangeet & Divine Blessing Ceremony",
       content: (
         <>
-          <div className="countdown">
-            🕒 {timeLeft.days}d {timeLeft.hours}h {timeLeft.minutes}m {timeLeft.seconds}s
-          </div>
-          <p>Under the starlit skies, two hearts become one.</p>
-          <h2>Santosh Singh 💍 Shalini Chourey</h2>
-          <div className="event">
-            <h3>The Wedding Ceremony</h3>
-            <p>
-              📅 22nd November 2025 | 🕖 From 7:00 PM onwards <br />
-              📍 Royal Marriage Garden, Sironj
+          <p className="fade-in fade-in-1">
+            A night of melodies, devotion, and joyful dance.
+          </p>
+          <div className="event fade-in fade-in-2">
+            <h2>Musical Evening & Divine Blessings</h2>
+            <p className="fade-in fade-in-3">📅 20th & 21st November 2025</p>
+            <p className="fade-in fade-in-4">📍 Bal Mukund ki Bagiya, Bhopal</p>
+            <p className="fade-in fade-in-5">
+              Join us for an evening filled with music, laughter, and blessings as we begin our new journey.
             </p>
-            <p>Join us for a regal evening of love, laughter, and lifelong memories.</p>
-            <a href="https://maps.app.goo.gl/3A3Hgx4CJXZbwf1r9" target="_blank" rel="noopener noreferrer" className="map-button">
-              📍 Get Directions
-            </a>
           </div>
         </>
       ),
-      bgImage:bgWedding,
+      bgImage: bgWedding,
+    },
+    {
+      id: 3,
+      title: "Wedding Ceremony",
+      content: (
+        <>
+          <p className="fade-in fade-in-1">
+            Under the starlit sky, as vows are exchanged and hearts unite forever.
+          </p>
+          <div className="event fade-in fade-in-2">
+            <h2>The Wedding Night</h2>
+            <p className="fade-in fade-in-3">
+              📅 22nd November 2025 | 🕖 From 7:00 PM onwards
+            </p>
+            <p className="fade-in fade-in-4">📍 Royal Marriage Garden, Sironj</p>
+            <p className="fade-in fade-in-5">
+              Join us for a regal evening of love, laughter, and lifelong memories.
+            </p>
+          </div>
+        </>
+      ),
+      bgImage: bgWedding,
     },
   ];
 
-  // Slide change interval
+  // Auto-slide every 27 seconds
   useEffect(() => {
     const interval = setInterval(() => {
       setCurrentSlide((prev) => (prev + 1) % slides.length);
-    }, 7000);
+    }, 17000);
     return () => clearInterval(interval);
   }, [slides.length]);
 
   // Try autoplay on mount
   useEffect(() => {
     if (audioRef.current) {
-      audioRef.current.play()
+      audioRef.current
+        .play()
         .then(() => setIsPlaying(true))
         .catch(() => setIsPlaying(false));
     }
@@ -107,37 +116,25 @@ function App() {
     }
   };
 
+  useEffect(() => {
+    const handleLoad = () => {
+      document.body.classList.add("loaded");
+    };
+    window.addEventListener("load", handleLoad);
+    return () => window.removeEventListener("load", handleLoad);
+  }, []);
+
   return (
     <div className="app">
       <audio ref={audioRef} src={musicFile} loop />
-      {/* Floating play button */}
-      <button className="play-button" onClick={togglePlay}>
-  {isPlaying ? "🎵" : "🎶"}
-      </button>
-
       <div
         key={slides[currentSlide].id}
-        className="slide fade-in"
+        className="slide"
         style={{ backgroundImage: `url(${slides[currentSlide].bgImage})` }}
       >
         <div className="overlay" />
-        <div className="petals">
-          {[...Array(25)].map((_, i) => (
-            <div
-              key={i}
-              className="petal"
-              style={{
-                left: `${Math.random() * 100}%`,
-                animationDelay: `${Math.random() * 8}s`,
-                animationDuration: `${10 + Math.random() * 5}s`,
-              }}
-            >
-              🌸
-            </div>
-          ))}
-        </div>
         <div className="content-container">
-          <h1>{slides[currentSlide].title}</h1>
+          <h1 className="fade-in tangerine-bold">{slides[currentSlide].title}</h1>
           {slides[currentSlide].content}
         </div>
       </div>
